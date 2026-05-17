@@ -10,7 +10,6 @@ coverage/
 npm-debug.log*
 .DS_Store
 API key.txt
-brevo.md
 .agents/
 .codex/
 sandbox-write-check.txt
