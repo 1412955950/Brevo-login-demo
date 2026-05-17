@@ -67,8 +67,37 @@ app.use((error, _req, res, _next) => {
   });
 });
 
-app.listen(config.port, config.host, () => {
+const server = app.listen(config.port, config.host, () => {
   console.log(
     `Brevo OTP demo backend listening on http://${config.host}:${config.port}`
   );
 });
+
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(
+      `Port ${config.port} is already in use on ${config.host}. Stop the existing server process or change PORT in .env, then try again.`
+    );
+    process.exit(1);
+  }
+
+  if (error.code === "EACCES") {
+    console.error(
+      `Port ${config.port} on ${config.host} is not accessible in the current environment. Update HOST or PORT in .env and retry.`
+    );
+    process.exit(1);
+  }
+
+  console.error(error);
+  process.exit(1);
+});
+
+function shutdown(signal) {
+  console.log(`Received ${signal}, closing backend server...`);
+  server.close(() => {
+    process.exit(0);
+  });
+}
+
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));

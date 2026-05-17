@@ -1,6 +1,11 @@
 import axios from "axios";
+import dotenv from "dotenv";
 
-const baseUrl = process.env.BASE_URL ?? "http://127.0.0.1:45678";
+dotenv.config();
+
+const defaultHost = process.env.HOST ?? "127.0.0.1";
+const defaultPort = process.env.PORT ?? "45678";
+const baseUrl = process.env.BASE_URL ?? `http://${defaultHost}:${defaultPort}`;
 const testEmail = process.env.TEST_EMAIL;
 const devApiToken = process.env.DEV_API_TOKEN;
 
